@@ -2,6 +2,7 @@
 import re
 import argparse
 import json
+import os
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +19,8 @@ parser.add_argument('tour_name')
 
 args = parser.parse_args()
 
-with open('rk9Formes.json', 'r') as formeList:
+script_dir = os.path.dirname(__file__)
+with open(os.path.join(script_dir, 'rk9Formes.json'), 'r') as formeList:
     formes = json.load(formeList)
 
 
@@ -229,7 +231,7 @@ if __name__ == '__main__':
         json.dump({
             'matched': players_out['matched'],
             'unmatched': {
-                'roster': {{'rosterInfo': player} for player in roster_players},
+                'roster': [{'rosterInfo': player} for player in roster_players],
                 'pairings': {i: {'name': players[i]['name']} for i in players_left}
             }
         }, outfile, indent=2, ensure_ascii=False)

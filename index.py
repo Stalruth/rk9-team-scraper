@@ -210,7 +210,7 @@ if __name__ == '__main__':
             if player['rosterInfo']['teamlist'] != "" and player.get('paste') is None:
                 if not paste_notice_sent and os.environ['WEBHOOK'] is not None:
                     requests.post(os.environ['WEBHOOK'], {
-                        'content': f'Teams from {args.tour_name} are up!\nhttps://rk9.gg/{args.url}'
+                        'content': f'Teams from {args.tour_name} are up!\nhttps://rk9.gg/roster/{args.url}'
                     })
                     paste_notice_sent = True
                 player_team = get_team(player['rosterInfo']['teamlist'])

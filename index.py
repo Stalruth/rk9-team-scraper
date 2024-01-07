@@ -202,11 +202,17 @@ if __name__ == '__main__':
         roster_players = []
         players_left = []
 
+    paste_notice_sent = False
     if len(players_left) == 0 and are_teamlists_available(f"https://rk9.gg/roster/{args.url}"):
         # upload pastes
         for player_id in players_out['matched']:
             player = players_out['matched'][player_id]
             if player['rosterInfo']['teamlist'] != "" and player.get('paste') is None:
+                if not paste_notice_sent and os.environ['WEBHOOK'] is not None:
+                    requests.post(os.environ['WEBHOOK'], {
+                        'content': f'Teams from {args.tour_name} are up!\nhttps://rk9.gg/{args.url}'
+                    })
+                    paste_notice_sent = True
                 player_team = get_team(player['rosterInfo']['teamlist'])
                 player['team'] = [pokemon['species'] for pokemon in player_team]
                 player['fullTeam'] = player_team

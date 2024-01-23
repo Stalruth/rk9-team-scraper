@@ -217,6 +217,10 @@ if __name__ == '__main__':
                 player['team'] = [pokemon['species'] for pokemon in player_team]
                 player['fullTeam'] = player_team
                 player['paste'] = make_pokepaste(player, args.tour_name)
+        if paste_notice_sent:
+            requests.post(os.environ['WEBHOOK'], {
+                'content': f'Teams from {args.tour_name} are up on the standings site!'
+            })
 
         teams_out = {
             player_id: {

@@ -24,9 +24,7 @@ with open(os.path.join(script_dir, 'rk9Formes.json'), 'r') as formeList:
     formes = json.load(formeList)
 
 
-def get_players(url):
-    page = requests.get(url)
-
+def get_players(page):
     soup = BeautifulSoup(page.content, "html.parser")
 
     results = []
@@ -136,8 +134,7 @@ def make_pokepaste(player, tour_name):
     return response.url
 
 
-def are_teamlists_available(url):
-    page = requests.get(url)
+def are_teamlists_available(page):
     soup = BeautifulSoup(page.content, "html.parser")
     for result in soup.tbody.find_all('i', class_='fal fa-lg fa-list-alt'):
         for string in result.parent.stripped_strings:
@@ -150,7 +147,9 @@ if __name__ == '__main__':
     with open(args.players, 'r') as infile:
         players = json.load(infile)
 
-    roster_players = get_players(f"https://rk9.gg/roster/{args.url}")
+    roster = requests.get(f"https://rk9.gg/roster/{args.url}")
+
+    roster_players = get_players(roster)
 
     players_out = {'matched': {}, 'unmatched': {}}
     try:
@@ -203,7 +202,7 @@ if __name__ == '__main__':
         players_left = []
 
     paste_notice_sent = False
-    if len(players_left) == 0 and are_teamlists_available(f"https://rk9.gg/roster/{args.url}"):
+    if len(players_left) == 0 and are_teamlists_available(roster):
         # upload pastes
         for player_id in players_out['matched']:
             player = players_out['matched'][player_id]

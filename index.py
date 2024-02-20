@@ -161,9 +161,10 @@ if __name__ == '__main__':
     # remove loaded players from roster and pairings
     for i in players_out['matched']:
         current_player = players_out['matched'][i]
-        record = [p for p in roster_players if compare_records(current_player['rosterInfo'], p)][0]
-        roster_players.remove(record)
-        current_player['rosterInfo'] = record
+        records = [p for p in roster_players if compare_records(current_player['rosterInfo'], p)]
+        if len(records > 0):
+            roster_players.remove(records[0])
+            current_player['rosterInfo'] = records[0]
 
     players_left = [i for i in players if i not in players_out['matched']]
 
